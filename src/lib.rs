@@ -36,15 +36,22 @@ fn dyn_sol_to_py(sol_val: &DynSolValue, py: Python<'_>) -> PyResult<PyObject> {
     }
 }
 
+fn general_decode(sol_type: &DynSolType, encoded: &[u8]) -> Result<DynSolValue, PyErr> {
+    if let Ok(value) = sol_type.decode_single(&encoded) {
+        return Ok(value);
+    }
+    sol_type
+        .decode_sequence(&encoded)
+        .map_err(|err| PyValueError::new_err(format!("{}", err)))
+}
+
 #[pyfunction]
 fn decode(py: Python, type_str: &str, encoded: &[u8]) -> PyResult<PyObject> {
     let sol_type: DynSolType = type_str
         .parse()
         .map_err(|err| PyValueError::new_err(format!("{}", err)))?;
 
-    let value: DynSolValue = sol_type
-        .decode_single(&encoded)
-        .map_err(|err| PyValueError::new_err(format!("{}", err)))?;
+    let value = general_decode(&sol_type, &encoded)?;
 
     dyn_sol_to_py(&value, py)
 }
