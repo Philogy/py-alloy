@@ -5,10 +5,10 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "alloy"
+name = "py_alloy"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = "0.19.0"
+pyo3 = "0.18.3"
 alloy-dyn-abi = { git = "https://github.com/alloy-rs/core", tag="v0.2.0" }
-ruint2 = "1.9.0"
+ruint2 = {version="^1.9.0", features=["pyo3"]}
