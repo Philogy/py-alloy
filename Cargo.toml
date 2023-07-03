@@ -10,5 +10,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.18.3"
-alloy-dyn-abi = { git = "https://github.com/alloy-rs/core", tag="v0.2.0" }
+alloy-dyn-abi = { git = "https://github.com/alloy-rs/core", branch="main" }
 ruint2 = {version="^1.9.0", features=["pyo3"]}
