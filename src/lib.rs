@@ -2,6 +2,8 @@ use alloy_dyn_abi::{DynSolType, DynSolValue};
 use pyo3::exceptions::{PyException, PyValueError};
 use pyo3::prelude::*;
 
+mod erc20;
+
 fn dyn_sol_to_py(sol_val: &DynSolValue, py: Python<'_>) -> PyResult<PyObject> {
     // TODO: Int, Custom Struct, Custom Value
     match sol_val {
@@ -38,7 +40,8 @@ fn decode(py: Python, type_str: &str, encoded: &[u8]) -> PyResult<PyObject> {
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn py_alloy(_py: Python, m: &PyModule) -> PyResult<()> {
+fn py_alloy(py: Python, m: &PyModule) -> PyResult<()> {
+    erc20::register_erc20(py, m)?;
     m.add_function(wrap_pyfunction!(decode, m)?)?;
     Ok(())
 }
